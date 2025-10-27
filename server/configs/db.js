@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
+
 const connectDB = async () => {
   try {
     let mongodbURI = process.env.MONGODB_URI;
@@ -11,13 +12,11 @@ const connectDB = async () => {
       throw new Error("MONGODB_URI is not defined in environment variables");
     }
     
-    mongodbURI = mongodbURI.replace(/\/+$/, "");
+    mongodbURI = mongodbURI.replace(/\/+$/, ""); // 
 
     // detect if URI already contains a DB name
     const hasDb = /\/[^\/\?]+(\?|$)/.test(mongodbURI);
     const connectString = hasDb ? mongodbURI : `${mongodbURI}/${projectName}`;
-
-
     
     await mongoose.connect(connectString, {
       useNewUrlParser: true,
@@ -30,6 +29,7 @@ const connectDB = async () => {
     
     mongoose.connection.on("error", (err) => {
       console.error("MongoDB connection error (event):", err);
+      proceess.exit( 1) ; 
     });
 
   } catch (err) {

@@ -13,7 +13,9 @@ const PORT = process.env.PORT || 3000;
 await connectDB()
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: "https://ai-resume-builder-0-omlz.vercel.app/"
+}));
 
 app.get('/', (req, res)=> res.send("Server is live..."))
 app.use('/api/users', userRouter)

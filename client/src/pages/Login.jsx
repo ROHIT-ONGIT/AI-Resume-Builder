@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 
 const Login = () => {
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const query = new URLSearchParams(window.location.search)
   const urlState = query.get('state')
   const [state, setState] = React.useState(urlState || "login")
@@ -22,11 +22,15 @@ const Login = () => {
         e.preventDefault()
         try {
             const { data } = await api.post(`/api/users/${state}`, formData)
-            dispatch(login(data))
+            
+            dispatch(login({ token: data.token, user: data.user }))
+            // persist token if reducer doesn't already
             localStorage.setItem('token', data.token)
-            toast.success(data.message)
+            toast.success(data.message || 'Success')
+            // optional: redirect after login
+            // navigate('/dashboard')
         } catch (error) {
-            toast(error?.response?.data?.message || error.message)
+            toast.error(error?.response?.data?.message || error.message)
         }
     }
 
